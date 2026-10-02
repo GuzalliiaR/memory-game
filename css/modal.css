@@ -1,0 +1,53 @@
+dialog {
+    border-radius: 40px;
+    border: 2px solid #000000;
+    padding: 0;
+    box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
+    /* background-color: var(--color-bg); */
+    /* color: var(--color-text-dark); */
+    /* font-size: 20px;
+    line-height: 1.3em; */
+
+    /* allow-discrete — разрешает анимировать display/overlay */
+    /* allow-discrete в overlay — держит dialog в топовом слое (top layer) пока идёт анимация закрытия */
+    /* allow-discrete в display говорит браузеру: «подержи display: block пока идёт анимация, и переключи в none только в самом конце» */
+    opacity: 0;
+    transform: scale(0.8);
+    transition:
+        opacity 0.3s ease-out,
+        transform 0.3s ease-out,
+        display 0.3s allow-discrete,
+        overlay 0.3s allow-discrete;
+}
+
+dialog[open] {
+    opacity: 1;
+    transform: scale(1);
+
+    /* стартовое состояние, с которого начинается появление */
+    /* Без @starting-style transition просто не запускается, потому что нет "начального кадра" */
+    @starting-style {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+body:has(dialog[open]) {
+    overflow: hidden; /* Запрет на прокрутку в body, которого есть dialog с атрибутом open*/
+}
+
+dialog::backdrop {
+    background-color: rgb(0, 0, 0, 0);
+    transition:
+        background-color 0.3s ease-out,
+        display 0.3s allow-discrete,
+        overlay 0.3s allow-discrete;
+}
+
+dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+
+    @starting-style {
+        background-color: rgb(0, 0, 0, 0);
+    }
+}
