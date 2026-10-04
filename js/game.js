@@ -1,4 +1,5 @@
 import { createElement, clearElement } from './helpers.js';
+import { saveResultInLS } from './storage.js';
 
 // 8 уникальных изображений-эмодзи
 const cards_unique = [
@@ -23,19 +24,32 @@ export function shuffle(array) {
 }
 
 export class GameController {
-    constructor({ gameBoard, movesCounter, pairsCounter }) {
+    constructor({ gameBoard, movesCounter, pairsCounter, onVictory }) {
         this.boardContainer = gameBoard;
         this.movesCounter = movesCounter;
         this.pairsCounter = pairsCounter;
+        this.onVictory = onVictory;
 
         this.cards = [];
         this.moves = 0;
         this.foundPairs = 0;
+        this.firstCard = null;
+        this.secondCard = null;
+        this.boardBlocked = false;
+        this.timeoutWatchPair = null;
     }
 
     startNewGame() {
+        // Если несовпавшая пара еще открыта, ее таймер принудительно обнуляется
+        clearTimeout(this.timeoutWatchPair);
+        this.timeoutWatchPair = null;
+
         this.moves = 0;
         this.foundPairs = 0;
+        this.firstCard = null;
+        this.secondCard = null;
+        this.boardBlocked = false;
+
         this.movesCounter.textContent = `Ходы: ${this.moves}`;
         this.pairsCounter.textContent = `Пары: ${this.foundPairs} из ${cards_unique.length}`;
 
@@ -102,7 +116,81 @@ export class GameController {
         })
     }
 
-    handleCardClick(cardState) {
-        console.log(`Клик по карточке ${cardState.domElement}`)
+    handleCardClick(card) {
+        if (card.isFlipped || card.isMatched || this.boardBlocked) {
+            return;
+        }
+
+        // Переворот карточки
+        card.domElement.classList.add('is-flipped');
+        card.isFlipped = true;
+
+        // Запись первой или второй карточки в ходе
+        if (!this.firstCard) {
+            this.firstCard = card;
+            console.log(this.firstCard);
+            return;
+        } else {
+            this.secondCard = card;
+            this.moves += 1;
+            console.log(this.secondCard);
+        }
+
+        // Сравнение карточек
+        if (this.firstCard.key === this.secondCard.key) {
+            this.matchSuccess();
+        } else {
+            this.matchFailure();
+        }
+
+        // Обновление счетчиков
+        this.movesCounter.textContent = `Ходы: ${this.moves}`;
+        this.pairsCounter.textContent = `Пары: ${this.foundPairs} из ${cards_unique.length}`;
+
+        // Очистка текущих ссылок
+        this.firstCard = null;
+        this.secondCard = null;
+    }
+
+    // Сценарий совпадения карточек
+    matchSuccess() {
+        this.firstCard.isMatched = true;
+        this.secondCard.isMatched = true;
+
+        // стилевое выделение совпавшей пары
+        this.firstCard.domElement.classList.add('matched');
+        this.secondCard.domElement.classList.add('matched');
+
+        this.foundPairs += 1;
+
+        // Сценарий победы
+        if (this.foundPairs === (this.cards.length / 2)) {
+            // сохранение результата в LS
+            saveResultInLS(this.moves);
+
+            // вызов функции модального окна победы
+            this.onVictory(this.moves);
+        }
+    }
+
+    // Сценарий не совпадения карточек
+    matchFailure() {
+        // блокируем карточки (игровое поле не кликается) пока игрок смотрит на не совпавшие карточки
+        this.boardBlocked = true;
+        
+        // сохранение ссылок в замыкание, чтобы не потерять на очистке this.firstCard и this.secondCard
+        const firstCard = this.firstCard;
+        const secondCard = this.secondCard;
+
+        this.timeoutWatchPair = setTimeout(() => {
+            
+            firstCard.domElement.classList.remove('is-flipped');
+            firstCard.isFlipped = false;
+
+            secondCard.domElement.classList.remove('is-flipped');
+            secondCard.isFlipped = false;
+
+            this.boardBlocked = false;
+        }, 1100);
     }
 }
