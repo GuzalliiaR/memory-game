@@ -10,6 +10,9 @@ export function createElement(tag, attributes = {}, ...children) {
             for (const [dataKey, dataVal] of Object.entries(value)) {
                 element.dataset[dataKey] = dataVal;
             }
+        } else if (key.startsWith('on') && typeof value === 'function') {
+            const eventName = key.slice(2).toLowerCase();
+            element.addEventListener(eventName, value);
         } else if (key === 'textContent') {
             element.textContent = value;
         } else {
