@@ -1,13 +1,59 @@
+body {
+    font-size: 20px;
+}
+
+button {
+    font-size: 0.8em;
+}
+
+header, section {
+    margin-bottom: 20px;
+}
+
+.header__actions {
+    display: flex;
+    justify-content: start;
+    gap: 50px;
+}
+
+.header_btn {
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.header_btn:active {
+    transform: scale(0.8);
+}
+
+
+.counter {
+    display: flex;
+    justify-content: start;
+    gap: 30px;
+}
+
+.counter__value {
+    display: inline-block;
+    padding: 10px 15px;
+    border: 1px solid #000000;
+}
+
+
+
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(4, minmax(0, 100px));
+    grid-template-columns: repeat(4, 100px);
+    grid-template-rows: repeat(4, 100px);
     gap: 8px;
 }
 
 .card {
-    width: 100%;
+    width: 100px;
     aspect-ratio: 1;
+    padding: 0;
     cursor: pointer;
     perspective: 800px;  /*можно позже попробовать 200 и 2000  - это глубина 3D-эффекта*/
 }

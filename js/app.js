@@ -1,4 +1,5 @@
 import { createElement } from './helpers.js';
+import { GameController } from './game.js';
 import { getLeaderboardLS } from './storage.js';
 import { openModal } from './modal.js';
 
@@ -23,18 +24,18 @@ const header = createElement(
     'header',
     { className: 'header' },
     headerTitle,
-    createElement('div', { className: 'headef__actions' }, newGameBtn, leaderboardBtn)
+    createElement('div', { className: 'header__actions' }, newGameBtn, leaderboardBtn)
 );
 
 
 // Счетчики
-const movesCounter = createElement('span', { className: 'counter__value' }, 'Ходы: 0');
-const pairsCounter = createElement('span', { className: 'counter__value' }, 'Пары: 0 из 8');
+const movesCounter = createElement('span', { className: 'counter__value' });
+const pairsCounter = createElement('span', { className: 'counter__value' });
 const counter = createElement('section', { className: 'counter' }, movesCounter, pairsCounter);
 
 
 // Игровое поле
-const gameBoard = createElement('main', { className: 'game-board' });
+const gameBoard = createElement('main', { className: 'game-board grid-container'});
 
 
 // Перенос интерфейса в body
@@ -43,9 +44,21 @@ document.body.appendChild(counter);
 document.body.appendChild(gameBoard);
 
 
+// Инициализация игрового контроллера
+const game = new GameController({
+    gameBoard,
+    movesCounter,
+    pairsCounter
+})
+
+
+// Автоматический запуск игры после загрузки и перезагрузки страницы
+game.startNewGame();
+
+
 // Функция ручного запуска новой игры
 function handleNewGame() {
-    console.log('новая игра');
+    game.startNewGame();
 };
 
 //Функция открытия модального окна лидеров Топ10
