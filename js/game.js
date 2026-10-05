@@ -7,7 +7,7 @@ const cards_unique = [
     { key: 'cake', label: 'торт', symbol: '🍰' },
     { key: 'chicken', label: 'цыпленок', symbol: '🐥' },
     { key: 'avocado', label: 'авокадо', symbol: '🥑' },
-    { key: 'coffee', label: 'кофе', symbol: '☕' },
+    { key: 'cherry', label: 'вишня', symbol: '🍒' },
     { key: 'croissant', label: 'круасан', symbol: '🥐' },
     { key: 'heart', label: 'сердце', symbol: '💙' },
     { key: 'grapes', label: 'виноград', symbol: '🍇' }
