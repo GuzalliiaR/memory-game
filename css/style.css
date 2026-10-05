@@ -19,8 +19,7 @@ header, section {
 
 .header__actions {
     display: flex;
-    justify-content: start;
-    gap: 50px;
+    justify-content: space-between;
 }
 
 .header_btn {
@@ -31,6 +30,10 @@ header, section {
     transition: transform 0.3s ease;
 }
 
+.header_btn:hover {
+    background-color: rgb(225, 225, 225);
+}
+
 .header_btn:active {
     transform: scale(0.8);
 }
@@ -38,8 +41,8 @@ header, section {
 
 .counter {
     display: flex;
-    justify-content: start;
-    gap: 30px;
+    justify-content: end;
+    gap: 10px;
 }
 
 .counter__value {

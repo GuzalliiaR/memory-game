@@ -75,6 +75,14 @@ dialog[open]::backdrop {
     transition: transform 0.3s ease;
 }
 
+.modal__Btn:hover {
+    background-color: rgb(225, 225, 225);
+}
+
+.modal__Btn:active {
+    transform: scale(0.8);
+}
+
 .modal__table {
     width: 100%;
     border-collapse: collapse;
