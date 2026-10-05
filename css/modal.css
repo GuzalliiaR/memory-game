@@ -1,0 +1,96 @@
+dialog {
+    border-radius: 40px;
+    border: 2px solid #000000;
+    padding: 0;
+    box-shadow: 10px 10px 25px rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+
+    /* allow-discrete — разрешает анимировать display/overlay */
+    /* allow-discrete в overlay — держит dialog в топовом слое (top layer) пока идёт анимация закрытия */
+    /* allow-discrete в display говорит браузеру: «подержи display: block пока идёт анимация, и переключи в none только в самом конце» */
+    opacity: 0;
+    transform: scale(0.8);
+    transition:
+        opacity 0.3s ease-out,
+        transform 0.3s ease-out,
+        display 0.3s allow-discrete,
+        overlay 0.3s allow-discrete;
+}
+
+dialog[open] {
+    opacity: 1;
+    transform: scale(1);
+
+    /* стартовое состояние, с которого начинается появление */
+    /* Без @starting-style transition просто не запускается, потому что нет "начального кадра" */
+    @starting-style {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+}
+
+body:has(dialog[open]) {
+    overflow: hidden; /* Запрет на прокрутку в body, которого есть dialog с атрибутом open*/
+}
+
+dialog::backdrop {
+    background-color: rgb(0, 0, 0, 0);
+    transition:
+        background-color 0.3s ease-out,
+        display 0.3s allow-discrete,
+        overlay 0.3s allow-discrete;
+}
+
+dialog[open]::backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+
+    @starting-style {
+        background-color: rgb(0, 0, 0, 0);
+    }
+}
+
+.modal__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: min(500px, 90vw);
+
+    padding: 20px;
+}
+
+.modal__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.modal__Btn {
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.modal__Btn:hover {
+    background-color: rgb(225, 225, 225);
+}
+
+.modal__Btn:active {
+    transform: scale(0.8);
+}
+
+.modal__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.modal__table th,
+.modal__table td {
+    padding: 5px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
