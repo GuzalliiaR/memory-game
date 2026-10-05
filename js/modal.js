@@ -1,6 +1,7 @@
 import { createElement } from './helpers.js';
 
 export function openModal(title, content) {
+    // Наполнение модального окна
     const titleModal = createElement('h2', { className: 'modal__title' }, title);
     const btnClose = createElement('button', { className: 'modal__Btn', 'type': 'button' }, 'Закрыть');
     const containerModal = createElement('div', { className: 'modal__container' },
@@ -16,13 +17,18 @@ export function openModal(title, content) {
     );
     document.body.appendChild(dialog);
 
-    btnClose.addEventListener('click', () => dialog.close());
 
+    // Закрытие кликом по кнопке или затемненному фону
+    btnClose.addEventListener('click', () => dialog.close());
     dialog.addEventListener('click', (e) => {
         if (e.target === dialog) { dialog.close() };
     });
 
-    dialog.addEventListener('close', () => dialog.remove());
+    // Удаление закрытого dialog из разметки
+    dialog.addEventListener('close', () => {
+        // Таймер для проигрывания анимации закрытия
+        setTimeout(() => dialog.remove(), 400);
+    });
 
     dialog.showModal();
     return dialog;
