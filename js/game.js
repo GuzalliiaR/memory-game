@@ -1,5 +1,4 @@
 import { createElement, clearElement } from './helpers.js';
-import { saveResultInLS } from './storage.js';
 
 // 8 уникальных изображений-эмодзи
 const cards_unique = [
@@ -24,11 +23,12 @@ export function shuffle(array) {
 }
 
 export class GameController {
-    constructor({ gameBoard, movesCounter, pairsCounter, onVictory }) {
+    constructor({ gameBoard, movesCounter, pairsCounter, onVictory, onSaveInLS }) {
         this.boardContainer = gameBoard;
         this.movesCounter = movesCounter;
         this.pairsCounter = pairsCounter;
         this.onVictory = onVictory;
+        this.onSaveInLS = onSaveInLS;
 
         this.cards = [];
         this.moves = 0;
@@ -43,12 +43,12 @@ export class GameController {
         // Если несовпавшая пара еще открыта, ее таймер принудительно обнуляется
         clearTimeout(this.timeoutWatchPair);
         this.timeoutWatchPair = null;
+        this.boardBlocked = false;
 
         this.moves = 0;
         this.foundPairs = 0;
         this.firstCard = null;
         this.secondCard = null;
-        this.boardBlocked = false;
 
         this.movesCounter.textContent = `Ходы: ${this.moves}`;
         this.pairsCounter.textContent = `Пары: ${this.foundPairs} из ${cards_unique.length}`;
@@ -164,7 +164,7 @@ export class GameController {
         // Сценарий победы
         if (this.foundPairs === (this.cards.length / 2)) {
             // сохранение результата в LS
-            saveResultInLS(this.moves);
+            this.onSaveInLS(this.moves);
 
             // вызов функции модального окна победы
             this.onVictory(this.moves);
