@@ -74,3 +74,15 @@ dialog[open]::backdrop {
     transform: scale(1);
     transition: transform 0.3s ease;
 }
+
+.modal__table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.modal__table th,
+.modal__table td {
+    padding: 5px 20px;
+    border-bottom: 1px solid #e0e0e0;
+}
