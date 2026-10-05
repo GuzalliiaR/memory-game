@@ -1,6 +1,6 @@
 import { createElement } from './helpers.js';
 import { GameController } from './game.js';
-import { getLeaderboardLS } from './storage.js';
+import { getLeaderboardLS, saveResultInLS } from './storage.js';
 import { openModal } from './modal.js';
 
 
@@ -49,8 +49,8 @@ const game = new GameController({
     gameBoard,
     movesCounter,
     pairsCounter,
-    // onVictory: (move) => openVictoryModal(move)
-    onVictory: openVictoryModal
+    onVictory: openVictoryModal,
+    onSaveInLS: saveResultInLS
 });
 
 
@@ -74,7 +74,7 @@ function openVictoryModal(move) {
     );
     const newGameBtn = createElement(
         'button',
-        { className: 'modal__Btn', onClick: () => startNewGame() },
+        { className: 'modal__Btn', 'type': 'button', onClick: () => onRestartClick() },
         'Новая игра'
     );
     const contentVictoryModal = createElement(
@@ -86,7 +86,7 @@ function openVictoryModal(move) {
 
     const victoryModal = openModal("🏆 Победа! 🎉", contentVictoryModal);
     
-    function startNewGame() {
+    function onRestartClick() {
         game.startNewGame();
         victoryModal.close();
     };
@@ -102,7 +102,7 @@ function buildLeaderboardContent() {
     const leaderboard = getLeaderboardLS();
 
     if (leaderboard.length === 0) {
-        return createElement('p', { className: 'modal__text' }, "Резульатов пока нет");
+        return createElement('p', { className: 'modal__text' }, "Результатов пока нет");
     }
 
     const th_name = ["Место", "Число ходов", "Дата"];
