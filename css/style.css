@@ -3,6 +3,8 @@
 }
 
 body {
+    width: fit-content;
+    margin: auto;
     font-size: 20px;
     background-color: var(--color-bd);
 }
