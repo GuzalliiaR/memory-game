@@ -69,7 +69,7 @@ function handleNewGame() {
 function openVictoryModal(move) {
     const message = createElement(
         'p',
-        { className: 'madal__text' },
+        { className: 'modal__text' },
         `Количество сделанных ходов: ${move}`
     );
     const newGameBtn = createElement(
@@ -94,5 +94,38 @@ function openVictoryModal(move) {
 
 // Функция открытия модального окна лидеров Топ10
 function openLeaderboard() {
-    console.log('таблица лидеров')
+    const contentLeaderboard = buildLeaderboardContent();
+    openModal("🏅 Таблица лидеров 🏅", contentLeaderboard);
+}
+
+function buildLeaderboardContent() {
+    const leaderboard = getLeaderboardLS();
+
+    if (leaderboard.length === 0) {
+        return createElement('p', { className: 'modal__text' }, "Резульатов пока нет");
+    }
+
+    const th_name = ["Место", "Число ходов", "Дата"];
+    const th = th_name.map(text => {
+        return createElement('th', { className: 'modal__table-headText' }, text);
+    });
+
+    const tr_inTbody = leaderboard.map((row, i) => {
+        return createElement(
+            'tr',
+            {},
+            createElement('td', { className: 'modal__table-text' }, i + 1),
+            createElement('td', { className: 'modal__table-text' }, row.moves),
+            createElement('td', { className: 'modal__table-text' }, row.date)
+        )
+    });
+
+    const table = createElement(
+        'table',
+        { className: 'modal__table' },
+        createElement('thead', { className: 'modal__table-head' }, createElement('tr', {}, ...th)),
+        createElement('tbody', { className: 'modal__table-body' }, ...tr_inTbody)
+    );
+
+    return createElement('div', { className: 'modal__content' }, table);
 }
