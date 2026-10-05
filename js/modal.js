@@ -2,7 +2,7 @@ import { createElement } from './helpers.js';
 
 export function openModal(title, content) {
     const titleModal = createElement('h2', { className: 'modal__title' }, title);
-    const btnClose = createElement('button', { className: 'modal__closeBtn' }, 'Закрыть');
+    const btnClose = createElement('button', { className: 'modal__Btn' }, 'Закрыть');
     const containerModal = createElement('div', { className: 'modal__container' },
         titleModal,
         content,
