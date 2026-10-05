@@ -128,12 +128,10 @@ export class GameController {
         // Запись первой или второй карточки в ходе
         if (!this.firstCard) {
             this.firstCard = card;
-            console.log(this.firstCard);
             return;
         } else {
             this.secondCard = card;
             this.moves += 1;
-            console.log(this.secondCard);
         }
 
         // Сравнение карточек
